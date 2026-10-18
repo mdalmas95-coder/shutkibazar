@@ -261,7 +261,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                 onClose();
                 onProceedToCheckout();
               }}
-              className="w-full py-3 bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-700 hover:to-amber-800 text-white rounded-xl font-bold text-sm shadow-md shadow-amber-600/20 active:scale-95 transition-all flex items-center justify-center gap-2"
+              className="w-full py-3.5 bg-[#f85606] hover:bg-[#d94803] text-white rounded-xl font-bold text-sm shadow-md active:scale-95 transition-all flex items-center justify-center gap-2"
             >
               <span>{isBn ? 'চেকআউটে এগিয়ে যান' : 'Proceed to Checkout'}</span>
               <ArrowRight className="w-4 h-4" />

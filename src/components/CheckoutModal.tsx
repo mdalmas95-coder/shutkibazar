@@ -513,11 +513,10 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                 </div>
               </div>
 
-              {/* Submit Button */}
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full py-3.5 bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-700 hover:to-amber-800 text-white rounded-xl font-bold text-sm shadow-lg shadow-amber-600/20 active:scale-95 transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+                className="w-full py-3.5 bg-[#f85606] hover:bg-[#d94803] text-white rounded-xl font-bold text-sm shadow-lg shadow-orange-600/20 active:scale-95 transition-all flex items-center justify-center gap-2 disabled:opacity-50"
               >
                 {isSubmitting ? (
                   <span>{isBn ? 'অর্ডার প্রক্রিয়াধীন...' : 'Processing Order...'}</span>

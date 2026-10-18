@@ -28,6 +28,7 @@ import { FishermenFundSection } from './components/FishermenFundSection';
 import { InvoiceModal } from './components/InvoiceModal';
 import { WishlistDrawer } from './components/WishlistDrawer';
 import { FlashSaleBanner } from './components/FlashSaleBanner';
+import { GoogleSearchModal } from './components/GoogleSearchModal';
 import { Footer } from './components/Footer';
 import { Product, Fisherman, UserRole } from './types';
 import { 
@@ -79,6 +80,7 @@ const MainApp: React.FC = () => {
   const [isCustomBoxOpen, setIsCustomBoxOpen] = useState(false);
   const [isLabCertOpen, setIsLabCertOpen] = useState(false);
   const [isShelfLifeOpen, setIsShelfLifeOpen] = useState(false);
+  const [isGoogleSeoOpen, setIsGoogleSeoOpen] = useState(false);
 
   const [authDefaultRole, setAuthDefaultRole] = useState<UserRole>('customer');
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
@@ -164,9 +166,13 @@ const MainApp: React.FC = () => {
           setSelectedChatFisherman(fishermen[0]);
           setIsChatOpen(true);
         }}
-        onOpenAuth={() => setIsAuthOpen(true)}
+        onOpenAuth={(role) => {
+          if (role) setAuthDefaultRole(role);
+          setIsAuthOpen(true);
+        }}
         onOpenProfile={() => setIsProfileOpen(true)}
         onOpenWishlist={() => setIsWishlistOpen(true)}
+        onOpenGoogleSeo={() => setIsGoogleSeoOpen(true)}
       />
 
       {/* Main View Router */}
@@ -298,20 +304,15 @@ const MainApp: React.FC = () => {
             {/* Catalog Controls & Filters Header */}
             <div className="space-y-4">
               <div className="flex flex-wrap items-end justify-between gap-4">
-                <div>
-                  <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-100 text-amber-900 mb-1">
-                    <Sparkles className="w-3.5 h-3.5 text-amber-700" />
-                    <span>{isBn ? '১০০% খাঁটি ও নির্ভেজাল' : 'Fresh Sun-Dried Harvest'}</span>
-                  </div>
-                  <h2 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
-                    {isBn ? 'উপকূলীয় শুটকির সমাহার' : 'Authentic Dry Fish Collection'}
+                  <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight flex items-center gap-2">
+                    <span className="text-[#f85606] text-xl">●</span>
+                    <span>{isBn ? 'শুধু আপনার জন্য (Just For You)' : 'Just For You'}</span>
                   </h2>
-                  <p className="text-xs sm:text-sm text-slate-500">
+                  <p className="text-xs text-slate-500">
                     {isBn 
-                      ? 'কোনো ক্ষতিকর রাসায়নিক বা কীটনাশক ছাড়া সম্পূর্ণ স্বাস্থ্যসম্মত পদ্ধতিতে তৈরি শুটকি।'
-                      : 'Zero DDT or artificial preservatives. Vacuum-sealed in 3-layer pouches.'}
+                      ? 'দারাজ স্টাইলে সরাসরি উপকূলের ঘাট থেকে বাছাইকৃত ১০০% বিষমুক্ত ও খাঁটি শুটকি।'
+                      : 'Hand-picked 100% chemical-free sun-dried fish direct from coastal harbors.'}
                   </p>
-                </div>
 
                 {/* Sort Dropdown */}
                 <div className="flex items-center gap-2 text-xs">
@@ -407,7 +408,7 @@ const MainApp: React.FC = () => {
                 </button>
               </div>
             ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 sm:gap-4">
                 {filteredProducts.map((product) => (
                   <ProductCard
                     key={product.id}
@@ -523,6 +524,7 @@ const MainApp: React.FC = () => {
           setIsChatOpen(true);
         }}
         onScrollToRecipes={scrollToRecipes}
+        onOpenGoogleSeo={() => setIsGoogleSeoOpen(true)}
       />
 
       {/* Product Detail Modal */}
@@ -621,6 +623,12 @@ const MainApp: React.FC = () => {
           onClose={() => setSelectedOrderForInvoice(null)}
         />
       )}
+
+      {/* Google Search & SEO Simulator Modal */}
+      <GoogleSearchModal
+        isOpen={isGoogleSeoOpen}
+        onClose={() => setIsGoogleSeoOpen(false)}
+      />
 
       {/* Floating Smart AI Chatbot Order Assistant */}
       <ChatbotOrderAssistant

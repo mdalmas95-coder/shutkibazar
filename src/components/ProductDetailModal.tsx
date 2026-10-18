@@ -252,17 +252,17 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
 
                   <button
                     onClick={handleAddToCart}
-                    className="px-4 py-2.5 rounded-xl border border-amber-600 text-amber-700 hover:bg-amber-50 font-bold text-xs sm:text-sm flex items-center gap-1.5 transition-colors active:scale-95"
+                    className="px-4 py-2.5 rounded-xl border border-[#f85606] text-[#f85606] hover:bg-orange-50 font-bold text-xs sm:text-sm flex items-center gap-1.5 transition-colors active:scale-95"
                   >
                     <ShoppingBag className="w-4 h-4" />
-                    <span>{isBn ? 'ব্যাগ এ রাখুন' : 'Add to Cart'}</span>
+                    <span>{isBn ? 'কার্টে রাখুন' : 'Add to Cart'}</span>
                   </button>
 
                   <button
                     onClick={handleBuyNow}
-                    className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-700 hover:to-amber-800 text-white font-bold text-xs sm:text-sm shadow-md shadow-amber-600/20 active:scale-95 transition-all flex items-center gap-1.5"
+                    className="px-5 py-2.5 rounded-xl bg-[#f85606] hover:bg-[#d94803] text-white font-bold text-xs sm:text-sm shadow-md shadow-orange-600/20 active:scale-95 transition-all flex items-center gap-1.5"
                   >
-                    <span>{isBn ? 'সরাসরি অর্ডার করুন' : 'Buy Now'}</span>
+                    <span>{isBn ? 'সরাসরি কিনুন (Buy Now)' : 'Buy Now'}</span>
                   </button>
                 </div>
               </div>

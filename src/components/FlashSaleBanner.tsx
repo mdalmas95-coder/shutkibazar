@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useStore } from '../context/StoreContext';
-import { Flame, Clock, Tag, Sparkles, ShoppingBag, ArrowRight, Check, Percent } from 'lucide-react';
+import { Flame, Clock, Tag, ShoppingBag, ArrowRight, Check, Zap, ChevronRight } from 'lucide-react';
 import { Product } from '../types';
 
 interface FlashSaleBannerProps {
@@ -17,11 +17,11 @@ export const FlashSaleBanner: React.FC<FlashSaleBannerProps> = ({
 
   const [copiedCoupon, setCopiedCoupon] = useState(false);
 
-  // Countdown timer calculations (e.g. countdown to midnight or fixed 8 hours window)
+  // Live Countdown timer
   const [timeLeft, setTimeLeft] = useState({
-    hours: 7,
-    minutes: 42,
-    seconds: 19,
+    hours: 5,
+    minutes: 38,
+    seconds: 22,
   });
 
   useEffect(() => {
@@ -34,7 +34,7 @@ export const FlashSaleBanner: React.FC<FlashSaleBannerProps> = ({
         } else if (prev.hours > 0) {
           return { hours: prev.hours - 1, minutes: 59, seconds: 59 };
         } else {
-          return { hours: 12, minutes: 0, seconds: 0 }; // resets
+          return { hours: 12, minutes: 0, seconds: 0 };
         }
       });
     }, 1000);
@@ -49,189 +49,154 @@ export const FlashSaleBanner: React.FC<FlashSaleBannerProps> = ({
     setTimeout(() => setCopiedCoupon(false), 2500);
   };
 
-  // Top 4 flash sale dried fish items
-  const flashProducts = products.slice(0, 4);
+  // 6 flash deal products
+  const flashProducts = products.slice(0, 6);
+
+  const getDiscountedPrice = (product: Product) => {
+    const base = product.availableWeights[1]?.price || product.pricePerKg * 0.25;
+    return Math.round(base * 0.82); // ~18% off
+  };
+
+  const getOriginalPrice = (product: Product) => {
+    return product.availableWeights[1]?.price || product.pricePerKg * 0.25;
+  };
 
   return (
-    <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-amber-950 via-slate-900 to-amber-950 text-white shadow-2xl border-2 border-amber-500/40 p-5 sm:p-8">
-        {/* Decorative Glow */}
-        <div className="absolute top-0 right-0 w-96 h-96 bg-amber-600/15 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute bottom-0 left-0 w-80 h-80 bg-red-600/15 rounded-full blur-3xl pointer-events-none" />
-
-        {/* Header Row: Flash Sale Title + Countdown Timer */}
-        <div className="relative z-10 flex flex-wrap items-center justify-between gap-6 pb-6 border-b border-amber-500/20">
-          <div className="space-y-1.5 max-w-xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-500/20 border border-red-500/40 text-red-300 font-black text-xs uppercase tracking-wider animate-pulse">
-              <Flame className="w-4 h-4 text-amber-400 fill-amber-400" />
-              <span>{isBn ? '⚡ সীমিত সময়ের মেগা ফ্ল্যাশ সেল' : '⚡ Limited Time Mega Flash Sale'}</span>
-            </div>
-            <h2 className="text-xl sm:text-3xl font-black text-white tracking-tight">
-              {isBn 
-                ? 'নাজিরারটেক ও দুবলার চরের খাঁটি শুটকিতে সর্বোচ্চ ২৫% ছাড়!' 
-                : 'Up to 25% Off Pure Sun-Dried Coastal Delicacies!'}
-            </h2>
-            <p className="text-xs sm:text-sm text-amber-200/80">
-              {isBn 
-                ? 'কীটনাশকমুক্ত ও সম্পূর্ণ রোদে শুকানো টাটকা শুটকি সরাসরি জেলেদের থেকে সংগৃহীত।' 
-                : 'Direct harvest from verified artisanal fishermen. 100% chemical & pesticide free.'}
-            </p>
-          </div>
-
-          {/* Countdown Clock Display */}
-          <div className="flex flex-col sm:items-end gap-2">
-            <div className="text-[11px] font-bold text-amber-300 flex items-center gap-1.5">
-              <Clock className="w-3.5 h-3.5 animate-spin" />
-              <span>{isBn ? 'আজকের অফার শেষ হতে আর মাত্র বাকি:' : 'Flash Deal Ends In:'}</span>
-            </div>
-
+    <section id="flash-sale-section" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
+      <div className="bg-white rounded-2xl border border-slate-200 shadow-2xs overflow-hidden">
+        {/* Daraz Flash Sale Header Bar */}
+        <div className="p-4 sm:px-6 sm:py-4 border-b border-slate-100 flex flex-wrap items-center justify-between gap-4">
+          <div className="flex flex-wrap items-center gap-4 sm:gap-8">
+            {/* Title in Daraz Orange */}
             <div className="flex items-center gap-2">
-              {/* Hours */}
-              <div className="flex flex-col items-center">
-                <div className="w-14 sm:w-16 h-14 sm:h-16 rounded-2xl bg-amber-500/20 border border-amber-400/40 flex items-center justify-center font-mono font-black text-2xl sm:text-3xl text-amber-300 shadow-inner">
+              <Zap className="w-5 h-5 text-[#f85606] fill-[#f85606]" />
+              <h2 className="text-lg sm:text-xl font-black text-[#f85606] tracking-tight">
+                {isBn ? 'ফ্ল্যাশ সেল (Flash Sale)' : 'Flash Sale'}
+              </h2>
+            </div>
+
+            {/* Countdown Timer with Dark Boxes */}
+            <div className="flex items-center gap-2 text-xs">
+              <span className="font-bold text-slate-700 hidden sm:inline">
+                {isBn ? 'অফার শেষ হতে বাকি:' : 'Ending in:'}
+              </span>
+
+              <div className="flex items-center gap-1 font-mono font-black text-xs text-white">
+                <span className="bg-[#d32f2f] px-2 py-1 rounded shadow-xs">
                   {String(timeLeft.hours).padStart(2, '0')}
-                </div>
-                <span className="text-[10px] text-slate-400 font-semibold mt-1">
-                  {isBn ? 'ঘণ্টা' : 'Hours'}
                 </span>
-              </div>
-
-              <span className="font-mono font-black text-2xl text-amber-400 mb-4">:</span>
-
-              {/* Minutes */}
-              <div className="flex flex-col items-center">
-                <div className="w-14 sm:w-16 h-14 sm:h-16 rounded-2xl bg-amber-500/20 border border-amber-400/40 flex items-center justify-center font-mono font-black text-2xl sm:text-3xl text-amber-300 shadow-inner">
+                <span className="text-slate-800 font-bold">:</span>
+                <span className="bg-[#d32f2f] px-2 py-1 rounded shadow-xs">
                   {String(timeLeft.minutes).padStart(2, '0')}
-                </div>
-                <span className="text-[10px] text-slate-400 font-semibold mt-1">
-                  {isBn ? 'মিনিট' : 'Mins'}
                 </span>
-              </div>
-
-              <span className="font-mono font-black text-2xl text-amber-400 mb-4">:</span>
-
-              {/* Seconds */}
-              <div className="flex flex-col items-center">
-                <div className="w-14 sm:w-16 h-14 sm:h-16 rounded-2xl bg-red-500/20 border border-red-400/40 flex items-center justify-center font-mono font-black text-2xl sm:text-3xl text-red-300 shadow-inner animate-pulse">
+                <span className="text-slate-800 font-bold">:</span>
+                <span className="bg-[#d32f2f] px-2 py-1 rounded shadow-xs animate-pulse">
                   {String(timeLeft.seconds).padStart(2, '0')}
-                </div>
-                <span className="text-[10px] text-slate-400 font-semibold mt-1">
-                  {isBn ? 'সেকেন্ড' : 'Secs'}
                 </span>
               </div>
             </div>
 
-            {/* 1-Click Coupon Voucher */}
-            <div className="mt-1">
-              <button
-                onClick={() => handleCopyCoupon('SHUTKI15')}
-                className="group px-3.5 py-1.5 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 border border-amber-400/40 flex items-center gap-2 text-xs font-bold transition-all text-amber-200"
-                title={isBn ? 'কুপন কোড কপি করতে ক্লিক করুন' : 'Click to copy coupon code'}
-              >
-                <Tag className="w-3.5 h-3.5 text-amber-400" />
-                <span>
-                  {isBn ? 'অতিরিক্ত ১৫% ছাড়ের কোড:' : 'Extra 15% OFF Code:'}{' '}
-                  <span className="font-mono text-white underline decoration-amber-400 decoration-2">
-                    SHUTKI15
-                  </span>
+            {/* Extra Coupon Promo */}
+            <button
+              onClick={() => handleCopyCoupon('SHUTKI15')}
+              className="hidden md:flex items-center gap-1.5 text-xs font-bold text-amber-800 bg-amber-50 hover:bg-amber-100 px-3 py-1 rounded-full border border-amber-200 transition-colors"
+            >
+              <Tag className="w-3.5 h-3.5 text-amber-600" />
+              <span>{isBn ? 'কুপন কোড: SHUTKI15 (১৫% ছাড়)' : 'Coupon: SHUTKI15 (15% OFF)'}</span>
+              {copiedCoupon && (
+                <span className="text-emerald-700 text-[10px] bg-emerald-100 px-1.5 py-0.2 rounded font-bold">
+                  কপি হয়েছে!
                 </span>
-                {copiedCoupon ? (
-                  <span className="inline-flex items-center gap-1 bg-emerald-500 text-white text-[10px] px-2 py-0.5 rounded-md font-bold">
-                    <Check className="w-3 h-3" />
-                    {isBn ? 'কপি হয়েছে ও যুক্ত হয়েছে!' : 'Applied!'}
-                  </span>
-                ) : (
-                  <span className="text-[10px] bg-amber-400 text-slate-950 px-1.5 py-0.2 rounded font-black group-hover:scale-105 transition-transform">
-                    {isBn ? 'কপি করুন' : 'COPY'}
-                  </span>
-                )}
-              </button>
-            </div>
+              )}
+            </button>
           </div>
+
+          {/* Daraz "SHOP MORE" button */}
+          <button
+            onClick={() => {
+              const el = document.getElementById('products-section');
+              if (el) el.scrollIntoView({ behavior: 'smooth' });
+            }}
+            className="px-3.5 py-1.5 rounded-lg border border-[#f85606] text-[#f85606] hover:bg-orange-50 font-bold text-xs uppercase tracking-wider flex items-center gap-1 transition-colors"
+          >
+            <span>{isBn ? 'আরও দেখুন' : 'SHOP MORE'}</span>
+            <ChevronRight className="w-4 h-4" />
+          </button>
         </div>
 
-        {/* Flash Sale Product Cards Grid */}
-        <div className="relative z-10 pt-6">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {flashProducts.map((p, idx) => {
-              const discountPercent = idx === 0 ? 25 : idx === 1 ? 20 : idx === 2 ? 15 : 18;
-              const originalPrice = p.availableWeights[0]?.price ? Math.round(p.availableWeights[0].price * 1.25) : 350;
-              const discountedPrice = p.availableWeights[0]?.price || 280;
-              const claimedPercent = [82, 74, 91, 68][idx];
+        {/* Daraz Flash Sale Products Grid (6 items) */}
+        <div className="p-4 sm:p-5 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 sm:gap-4">
+          {flashProducts.map((p, idx) => {
+            const discPrice = getDiscountedPrice(p);
+            const origPrice = getOriginalPrice(p);
+            const soldCount = 8 + idx * 3;
 
-              return (
-                <div
-                  key={p.id}
-                  onClick={() => onSelectProduct(p)}
-                  className="group bg-slate-900/90 rounded-2xl border border-amber-500/30 hover:border-amber-400 p-3.5 flex flex-col justify-between space-y-3 cursor-pointer transition-all hover:-translate-y-1 hover:shadow-xl shadow-xs"
-                >
-                  <div className="space-y-2.5">
-                    {/* Image with flash discount badge */}
-                    <div className="relative aspect-4/3 rounded-xl overflow-hidden bg-slate-800">
-                      <img
-                        src={p.image}
-                        alt={p.name}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                      />
-                      <div className="absolute top-2 left-2 bg-gradient-to-r from-red-600 to-amber-600 text-white text-[11px] font-black px-2 py-0.5 rounded-md shadow-md flex items-center gap-1">
-                        <Flame className="w-3 h-3 fill-white" />
-                        <span>{discountPercent}% {isBn ? 'ছাড়' : 'OFF'}</span>
-                      </div>
-                      <div className="absolute bottom-2 right-2 bg-slate-950/80 backdrop-blur-xs text-[10px] font-mono text-amber-300 px-2 py-0.5 rounded">
-                        {p.availableWeights[0]?.label || '250g'}
-                      </div>
+            return (
+              <div
+                key={p.id}
+                onClick={() => onSelectProduct(p)}
+                className="group bg-white hover:shadow-md transition-all rounded-xl border border-slate-100 p-2.5 flex flex-col justify-between cursor-pointer relative"
+              >
+                {/* Discount Tag */}
+                <div className="absolute top-2 left-2 z-10 bg-[#f85606] text-white text-[10px] font-black px-1.5 py-0.5 rounded shadow-xs">
+                  -18%
+                </div>
+
+                {/* Product Image */}
+                <div className="relative aspect-square w-full rounded-lg overflow-hidden bg-slate-50 mb-2">
+                  <img
+                    src={p.image}
+                    alt={p.name}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    loading="lazy"
+                  />
+                </div>
+
+                {/* Product Info */}
+                <div className="space-y-1">
+                  <h3 className="text-xs font-bold text-slate-800 line-clamp-2 leading-snug group-hover:text-[#f85606] transition-colors">
+                    {isBn ? p.nameBn : p.name}
+                  </h3>
+
+                  {/* Price */}
+                  <div className="pt-0.5">
+                    <div className="text-sm font-black text-[#f85606] leading-none">
+                      ৳{discPrice}
                     </div>
-
-                    <div>
-                      <h4 className="font-extrabold text-white text-sm group-hover:text-amber-300 transition-colors truncate">
-                        {p.nameBn}
-                      </h4>
-                      <p className="text-[11px] text-slate-400 truncate font-mono">
-                        {p.name}
-                      </p>
-                    </div>
-
-                    {/* Pricing */}
-                    <div className="flex items-baseline gap-2">
-                      <span className="text-lg font-black text-amber-400">
-                        ৳{discountedPrice}
-                      </span>
-                      <span className="text-xs text-slate-500 line-through">
-                        ৳{originalPrice}
-                      </span>
-                    </div>
-
-                    {/* Claimed progress bar */}
-                    <div className="space-y-1">
-                      <div className="flex justify-between text-[10px] text-slate-300 font-semibold">
-                        <span>{isBn ? `বিক্রি হয়েছে: ${claimedPercent}%` : `Sold: ${claimedPercent}%`}</span>
-                        <span className="text-amber-400">{isBn ? 'স্টক দ্রুত ফুরিয়ে আসছে!' : 'Few left!'}</span>
-                      </div>
-                      <div className="w-full h-2 rounded-full bg-slate-800 overflow-hidden">
-                        <div
-                          className="h-full bg-gradient-to-r from-amber-500 to-red-500 rounded-full"
-                          style={{ width: `${claimedPercent}%` }}
-                        />
-                      </div>
+                    <div className="flex items-center gap-1.5 text-[11px] text-slate-400 mt-0.5">
+                      <span className="line-through">৳{origPrice}</span>
+                      <span className="text-[#f85606] font-semibold text-[10px]">-18%</span>
                     </div>
                   </div>
 
-                  {/* Quick Add Button */}
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      const weight = p.availableWeights[0]?.weight || 250;
-                      addToCart(p, weight, 1);
-                    }}
-                    className="w-full py-2 bg-amber-500 hover:bg-amber-400 text-slate-950 rounded-xl text-xs font-black flex items-center justify-center gap-1.5 transition-colors shadow-sm active:scale-95"
-                  >
-                    <ShoppingBag className="w-3.5 h-3.5" />
-                    <span>{isBn ? '⚡ ব্যাগে যোগ করুন' : 'Quick Add'}</span>
-                  </button>
+                  {/* Claimed Sold Progress Bar */}
+                  <div className="pt-1.5 space-y-1">
+                    <div className="flex items-center justify-between text-[10px] text-slate-500 font-semibold">
+                      <span>{isBn ? `${soldCount}টি বিক্রিত` : `${soldCount} Sold`}</span>
+                    </div>
+                    <div className="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                      <div
+                        className="h-full bg-gradient-to-r from-orange-500 to-[#f85606] rounded-full"
+                        style={{ width: `${Math.min(30 + idx * 12, 90)}%` }}
+                      />
+                    </div>
+                  </div>
                 </div>
-              );
-            })}
-          </div>
+
+                {/* Quick Add To Cart Button */}
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    addToCart(p, 250, 1);
+                  }}
+                  className="mt-2.5 w-full py-1.5 bg-orange-50 hover:bg-[#f85606] text-[#f85606] hover:text-white rounded-lg font-bold text-[11px] transition-colors flex items-center justify-center gap-1"
+                >
+                  <ShoppingBag className="w-3 h-3" />
+                  <span>{isBn ? 'কার্টে নিন' : 'Add to Cart'}</span>
+                </button>
+              </div>
+            );
+          })}
         </div>
       </div>
     </section>

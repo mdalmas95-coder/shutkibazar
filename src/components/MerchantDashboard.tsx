@@ -44,6 +44,7 @@ export const MerchantDashboard: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'analytics' | 'inventory' | 'orders' | 'profile'>('analytics');
   const [showAddProductModal, setShowAddProductModal] = useState(false);
   const [showOnboardFishermanModal, setShowOnboardFishermanModal] = useState(false);
+  const [successToast, setSuccessToast] = useState('');
 
   // New Product Form State
   const [newProdNameBn, setNewProdNameBn] = useState('');
@@ -150,11 +151,23 @@ export const MerchantDashboard: React.FC = () => {
     });
 
     setShowOnboardFishermanModal(false);
-    alert(isBn ? 'জেলে নিবন্ধন সফল হয়েছে! ড্যাশবোর্ড আপডেট করা হলো।' : 'Fisherman registered successfully!');
+    setSuccessToast(isBn ? 'জেলে নিবন্ধন সফল হয়েছে! ড্যাশবোর্ড আপডেট করা হলো।' : 'Fisherman registered successfully!');
+    setTimeout(() => setSuccessToast(''), 3500);
   };
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
+      {/* Toast Banner */}
+      {successToast && (
+        <div className="p-4 bg-emerald-50 border border-emerald-300 rounded-2xl text-emerald-900 font-bold text-xs flex items-center justify-between shadow-xs animate-in fade-in">
+          <div className="flex items-center gap-2">
+            <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+            <span>{successToast}</span>
+          </div>
+          <button onClick={() => setSuccessToast('')} className="text-emerald-700 hover:text-emerald-900">✕</button>
+        </div>
+      )}
+
       {/* Merchant Header Bar */}
       <div className="bg-gradient-to-r from-slate-900 via-amber-950 to-slate-900 rounded-2xl p-6 text-white shadow-xl border border-amber-900/40 flex flex-wrap items-center justify-between gap-4">
         <div className="flex items-center gap-4">
