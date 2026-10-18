@@ -1,0 +1,7 @@
+{
+  "name": "Shutki Bazar (শুটকি বাজার) - Bangladesh Dried Fish Marketplace",
+  "description": "Authentic, 100% chemical-free sun-dried fish sourced directly from coastal artisanal fishermen in Bangladesh. Featuring direct merchant onboarding, bKash/Nagad payments, chatbot ordering, recipes, and live seller chat.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
+
